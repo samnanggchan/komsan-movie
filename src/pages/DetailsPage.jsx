@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import useFetchDetails from "../hooks/useFetchDetails";
 import { useSelector } from "react-redux";
@@ -43,6 +43,7 @@ const DetailsPage = () => {
         <div className="w-full h-full">
           <img
             src={imageURL + data?.backdrop_path}
+            alt={data?.title || data?.name || "Backdrop"}
             className="h-full w-full object-cover"
           />
         </div>
@@ -53,6 +54,7 @@ const DetailsPage = () => {
         <div className="relative mx-auto lg:-mt-28 lg:mx-0 w-fit min-w-60">
           <img
             src={imageURL + data?.poster_path}
+            alt={data?.title || data?.name || "Poster"}
             className="h-80 w-60 object-cover rounded"
           />
           <button
@@ -122,7 +124,7 @@ const DetailsPage = () => {
               ?.filter((el) => el?.profile_path)
               .map((starCast, index) => {
                 return (
-                  <div>
+                  <div key={starCast?.id || `${starCast?.name}-${index}`}>
                     <div>
                       <img
                         src={imageURL + starCast?.profile_path}

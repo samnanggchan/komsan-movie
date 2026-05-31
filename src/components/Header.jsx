@@ -17,7 +17,7 @@ const Header = () => {
     if (search){
       navigate(`/search?q=${search}`);
     }
-  }, [search]);
+  }, [search, navigate]);
 
   const handleSubmit = (e) => {
     e.preventDefault();

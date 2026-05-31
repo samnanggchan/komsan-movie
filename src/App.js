@@ -3,7 +3,7 @@ import { Outlet } from "react-router-dom";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import MobileNavigation from "./components/MobileNavigation";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { setBannerData, setImageURL } from "./store/movieSlice";
@@ -11,30 +11,29 @@ import ScrollToTop from "./components/ScrollToTop";
 
 function App() {
   const dispatch = useDispatch();
-  const fetchTrendingData = async () => {
+  const fetchTrendingData = useCallback(async () => {
     try {
       const response = await axios.get("/trending/all/week");
-
       dispatch(setBannerData(response.data.results));
-
     } catch (error) {
       console.log("error", error);
     }
-  };
+  }, [dispatch]);
 
-  const fetchConfiguration = async ()=>{
+  const fetchConfiguration = useCallback(async () => {
     try {
       const response = await axios.get("/configuration");
-      dispatch(setImageURL(response.data.images.secure_base_url+"original"));
+      dispatch(setImageURL(response.data.images.secure_base_url + "original"));
     } catch (error) {
       console.log("error", error);
     }
-  }
+  }, [dispatch]);
 
   useEffect(() => {
     fetchTrendingData();
-    fetchConfiguration()
-  }, []);
+    fetchConfiguration();
+  }, [fetchTrendingData, fetchConfiguration]);
+
   return (
     <main className="pb-14 lg:pb-0">
       <ScrollToTop />

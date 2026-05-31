@@ -21,14 +21,13 @@ export const BannerHome = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      if (currentImage < bannerData.length - 1) {
-        handleNext();
-      } else {
-        setCurrentImage(0);
-      }
+      setCurrentImage((prev) =>
+        prev < bannerData.length - 1 ? prev + 1 : 0
+      );
     }, 5000);
+
     return () => clearInterval(interval);
-  }, [bannerData, imageURL,currentImage]);
+  }, [bannerData.length]);
 
   return (
     <section className="w-full h-full">

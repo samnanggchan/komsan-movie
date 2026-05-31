@@ -1,7 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
-import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { RouterProvider } from "react-router-dom";
 import router from "./routes";
@@ -11,9 +10,22 @@ import { store } from "./store/store";
 // setup axios
 
 axios.defaults.baseURL = "https://api.themoviedb.org/3";
-axios.defaults.headers.common[
-  "Authorization"
-] = `Bearer ${process.env.REACT_APP_ACCESS_TOKEN}`;
+
+const accessToken = process.env.REACT_APP_ACCESS_TOKEN;
+const apiKey = process.env.REACT_APP_TMDB_API_KEY;
+
+if (accessToken) {
+  axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
+} else if (apiKey) {
+  axios.defaults.params = {
+    ...axios.defaults.params,
+    api_key: apiKey,
+  };
+} else {
+  console.error(
+    "Missing TMDB credentials. Set REACT_APP_ACCESS_TOKEN or REACT_APP_TMDB_API_KEY in .env.local."
+  );
+}
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
